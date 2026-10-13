@@ -1,0 +1,10 @@
+name: First assessment
+on:
+  - workflow_dispatch
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello world
+        run: echo "Hello World"
