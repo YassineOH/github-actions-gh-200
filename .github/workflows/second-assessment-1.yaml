@@ -1,0 +1,40 @@
+name: Coverage
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run coverage
+        run: npm run test:coverage
+      - name: Upload coverage summary
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+          if-no-files-found: warn
+      - name: Show Coverage table
+        if: always()
+        run: |
+          { echo '| Metric | Covered | Total | % |'
+          echo '|---|---|---|---|'
+          jq -r '.total | to_entries[] | select(.key != "branchesTrue") | "| \(.key) | \(.value.covered) | \(.value.total) | \(.value.pct)% |"' coverage/coverage-summary.json
+          } >> $GITHUB_STEP_SUMMARY
