@@ -1,4 +1,5 @@
 name: Coverage
+description: description
 
 on:
   pull_request:
