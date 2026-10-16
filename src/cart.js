@@ -11,8 +11,10 @@ function createCart() {
 
 function addItem(cart, { sku, price, quantity = 1 }) {
   if (!sku) throw new Error('sku is required');
-  if (typeof price !== 'number' || price < 0) throw new Error('price must be a non-negative number');
-  if (!Number.isInteger(quantity) || quantity < 1) throw new Error('quantity must be a positive integer');
+  if (typeof price !== 'number' || price < 0)
+    throw new Error('price must be a non-negative number');
+  if (!Number.isInteger(quantity) || quantity < 1)
+    throw new Error('quantity must be a positive integer');
 
   const existing = cart.items.find((item) => item.sku === sku);
   if (existing) {
@@ -29,13 +31,16 @@ function removeItem(cart, sku) {
 }
 
 function subtotal(cart) {
-  return round(cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0));
+  return round(
+    cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+  );
 }
 
 // percent is a number between 0 and 100
 function applyDiscount(amount, percent) {
-  if (percent < 0 || percent > 100) throw new Error('percent must be between 0 and 100');
-  return round(amount - amount * percent);
+  if (percent < 0 || percent > 100)
+    throw new Error('percent must be between 0 and 100');
+  return round(amount - (amount * percent) / 100);
 }
 
 function taxFor(amount, country) {
