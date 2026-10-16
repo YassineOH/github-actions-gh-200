@@ -21,9 +21,15 @@ describe('addItem', () => {
   });
 
   test('rejects invalid input', () => {
-    expect(() => addItem(createCart(), { price: 1 })).toThrow('sku is required');
-    expect(() => addItem(createCart(), { sku: 'x', price: -1 })).toThrow('price');
-    expect(() => addItem(createCart(), { sku: 'x', price: 1, quantity: 0 })).toThrow('quantity');
+    expect(() => addItem(createCart(), { price: 1 })).toThrow(
+      'sku is required',
+    );
+    expect(() => addItem(createCart(), { sku: 'x', price: -1 })).toThrow(
+      'price',
+    );
+    expect(() =>
+      addItem(createCart(), { sku: 'x', price: 1, quantity: 0 }),
+    ).toThrow('quantity');
   });
 });
 
@@ -53,6 +59,12 @@ describe('subtotal', () => {
 describe('applyDiscount', () => {
   test('applies a percentage discount', () => {
     expect(applyDiscount(200, 10)).toBe(180);
+  });
+
+  test("negative percentages aren't allowed", () => {
+    expect(() => applyDiscount(100, -1)).toThrow(
+      'percent must be between 0 and 100',
+    );
   });
 
   test('0% leaves the amount unchanged', () => {
